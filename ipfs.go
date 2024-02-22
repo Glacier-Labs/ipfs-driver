@@ -53,7 +53,8 @@ func (ipfs *IpfsDriver) stat(ctx context.Context, key string) (hash string, size
 		Hash string
 		Size int64
 	}
-	err = ipfs.client.Request("files/stat", path).Exec(ctx, &res)
+	// use cidv1: https://github.com/ipfs/kubo/issues/9529
+	err = ipfs.client.Request("files/stat", path).Option("cid-base", "base32").Exec(ctx, &res)
 	hash = res.Hash
 	size = res.Size
 	return
